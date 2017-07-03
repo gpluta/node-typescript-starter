@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "allowUnreachableCode": false,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "baseUrl": "src/",
+        "rootDir": "src/",
+        "outDir": "dist/",
+        "lib": [
+          "ESNext"
+        ]
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
