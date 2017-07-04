@@ -16,7 +16,7 @@ watcher
         console.log(`${event}: ${path}`);
         compileTypescript()
             .catch(e => {
-                console.log(e);
+                console.log(chalk.red(e));
             });
     });
 
