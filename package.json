@@ -4,12 +4,15 @@
     "description": "super simple TS starter project",
     "scripts": {
         "build": "./node_modules/.bin/tsc",
-        "work": "node work.js",
+        "watch": "node watch.js",
         "clean": "shx rm -rf ./dist"
     },
     "devDependencies": {
         "@types/chalk": "^0.4.31",
+        "@types/chokidar": "^1.7.0",
         "@types/node": "^8.0.7",
+        "chalk": "^2.0.1",
+        "chokidar": "^1.7.0",
         "shx": "^0.2.2",
         "tslint": "^5.4.3",
         "typescript": "2.4.1"
