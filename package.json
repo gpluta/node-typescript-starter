@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "description": "super simple TS starter project",
     "scripts": {
-        "build": "./node_modules/.bin/tsc",
+        "build": "npm run clean && ./node_modules/.bin/tsc",
         "watch": "node watch.js",
         "clean": "shx rm -rf ./dist"
     },
