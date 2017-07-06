@@ -20,7 +20,8 @@ let rollupCache;
 const config = {
     src: './src', // Source files to be watched
 
-    // You can generate a bundle, only if you emit es6 modules from TS. For working on some browser lib, I suppose...
+    // You can generate a bundle, only if you emit es6 modules from TS ("module": "es6" in tsconfig.json)
+    // For working on some browser lib, I suppose...
     // TODO: Split compilation and bundling into separate functions
     generateBundle: false,
     bundleFormat: 'umd', // 'amd', 'cjs', 'es', 'iife', 'umd'
@@ -29,26 +30,34 @@ const config = {
 };
 
 if (argv.build) {
+    // Just build, by passing --build argument to watch.js
     compile()
+        .then(() => {
+            console.log(chalk.green('Done.'));
+            process.exit(0);
+        })
         .catch(e => {
             console.error(chalk.red(e));
         });
-    console.log(chalk.green('Done.'));
-    return;
-}
 
-const watcher = chokidar.watch(config.src, {
-    ignoreInitial: true
-});
-
-watcher
-    .on('all', (event, path) => {
-        console.log(`${event}: ${path}`);
-        compile()
-            .catch(e => {
-                console.error(chalk.red(e));
-            });
+    console.log('compiling...');
+} else {
+    // Else - launch the file watcher and wait for changes...
+    const watcher = chokidar.watch(config.src, {
+        ignoreInitial: true
     });
+
+    watcher
+        .on('all', (event, path) => {
+            console.log(`${event}: ${path}`);
+            compile()
+                .catch(e => {
+                    console.error(chalk.red(e));
+                });
+        });
+
+    log(chalk.blue('Watching for changes'));
+}
 
 async function compile() {
     let command = 'node_modules/.bin/tsc';
@@ -59,7 +68,11 @@ async function compile() {
         console.log(chalk.green(`Compiled in ${(new Date() - start) / 1000} secs`));
 
         if (!config.generateBundle) return;
+    } catch (e) {
+        throw new Error(e.stdout);
+    }
 
+    try {
         console.log(chalk.green('Launching rollup...'));
         start = new Date();
 
@@ -101,5 +114,3 @@ function getPrettyTime() {
 
     return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
-
-log(chalk.blue('Watching for changes'));
