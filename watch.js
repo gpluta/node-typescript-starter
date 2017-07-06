@@ -1,11 +1,15 @@
 const util = require('util');
 const fs = require('fs');
+const path = require('path');
 const mkdirp = require('mkdirp');
 
 const chalk = require('chalk');
 const chokidar = require('chokidar');
+const argv = require('yargs').argv;
 
 const rollup = require('rollup');
+const nodeResolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
 
 const exec = util.promisify(require('child_process').exec);
 
@@ -16,11 +20,22 @@ let rollupCache;
 const config = {
     src: './src', // Source files to be watched
 
-    generateBundle: true, // You can skip bundling
+    // You can generate a bundle, only if you emit es6 modules from TS. For working on some browser lib, I suppose...
+    // TODO: Split compilation and bundling into separate functions
+    generateBundle: false,
     bundleFormat: 'umd', // 'amd', 'cjs', 'es', 'iife', 'umd'
     bundleDir: './bundle', // Bundle write dir
     bundleFile: 'bundle.js' // Bundle file name
 };
+
+if (argv.build) {
+    compile()
+        .catch(e => {
+            console.error(chalk.red(e));
+        });
+    console.log(chalk.green('Done.'));
+    return;
+}
 
 const watcher = chokidar.watch(config.src, {
     ignoreInitial: true
@@ -47,9 +62,14 @@ async function compile() {
 
         console.log(chalk.green('Launching rollup...'));
         start = new Date();
+
         let bundle = await rollup.rollup({
             entry: './dist/app.js',
-            cache: rollupCache
+            cache: rollupCache,
+            plugins: [
+                nodeResolve({jsnext: true, main: true}),
+                commonjs({include: 'node_modules/**'})
+            ]
         });
 
         let result = bundle.generate({
@@ -58,11 +78,12 @@ async function compile() {
 
         rollupCache = bundle;
         mkdirp.sync(config.bundleDir);
-        fs.writeFileSync(config.bundleFile, result.code);
+
+        fs.writeFileSync(path.join(config.bundleDir, config.bundleFile), result.code);
         console.log(chalk.green(`Rolled up in ${(new Date() - start) / 1000} secs\n---`));
 
     } catch (e) {
-        throw new Error(e.stdout);
+        throw new Error(e);
     }
 }
 
