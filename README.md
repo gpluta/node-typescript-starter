@@ -1,4 +1,6 @@
-Super simple ts starter - for node apps - without bundling
+Super simple ts starter - for node apps
+
+(with optional bundling via Rollup)
 
 - Run `npm run watch` to start the watcher
 - Run `npm run build` to build your project from `./src` dir
