@@ -5,7 +5,7 @@
     "scripts": {
         "build": "npm run clean && ./node_modules/.bin/tsc",
         "watch": "node watch.js",
-        "clean": "shx rm -rf ./dist"
+        "clean": "shx rm -rf ./dist ./bundle"
     },
     "devDependencies": {
         "@types/chalk": "^0.4.31",
@@ -13,6 +13,8 @@
         "@types/node": "^8.0.7",
         "chalk": "^2.0.1",
         "chokidar": "^1.7.0",
+        "mkdirp": "^0.5.1",
+        "rollup": "^0.43.0",
         "shx": "^0.2.2",
         "tslint": "^5.4.3",
         "typescript": "2.4.1"
