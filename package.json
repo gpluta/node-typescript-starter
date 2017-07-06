@@ -3,8 +3,8 @@
     "version": "0.0.1",
     "description": "super simple TS starter project",
     "scripts": {
-        "build": "npm run clean && ./node_modules/.bin/tsc",
-        "watch": "node watch.js",
+        "build": "npm run clean && node watch.js --build",
+        "watch": "npm run build && node watch.js",
         "clean": "shx rm -rf ./dist ./bundle"
     },
     "devDependencies": {
@@ -15,8 +15,13 @@
         "chokidar": "^1.7.0",
         "mkdirp": "^0.5.1",
         "rollup": "^0.43.0",
+        "rollup-plugin-node-resolve": "^3.0.0",
         "shx": "^0.2.2",
         "tslint": "^5.4.3",
-        "typescript": "2.4.1"
+        "typescript": "2.4.1",
+        "yargs": "^8.0.2"
+    },
+    "dependencies": {
+        "rollup-plugin-commonjs": "^8.0.2"
     }
 }
