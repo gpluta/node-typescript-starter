@@ -5,4 +5,6 @@ Super simple ts starter - for node apps - without bundling
 - Run `npm run clean` to clean up the mess ;)
 - Work in `./src`
 
+Hint: check out `config` in `watch.js` script.
+
 Expect compiled results to land in `./dist`
